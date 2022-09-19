@@ -1,4 +1,4 @@
-Answer question 1: 0.6363636363636362
-Answer question 2: 0.48484848484848486
-Answer question 3: 0.0993150269746014
+Answer question 1: 0.636
+Answer question 2: 0.485
+Answer question 3: 0.099
 Answer question 4: Advanced
