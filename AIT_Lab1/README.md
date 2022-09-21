@@ -18,5 +18,5 @@ In the first iteration, it provides the stored 'priors' as priors.
 Since we keep updating the posteriors, each next iteration takes the current value of the posterior as its prior.
 After all observations have been processed, the posterior probabilities are returned.
 
-To run our code from the terminal and generate the answer file called "group_15.txt", go to the folder where the python files are saved.
+To run our code from the terminal and generate the answer file called "group_15.txt", cd into the unzipped folder (i.e. AIT_Lab1) where the python files are saved.
 The python file that produces the answer file is then run by typinh "python .\AIT_lab1.py".

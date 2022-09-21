@@ -1,5 +1,5 @@
 # Part 1: data
-from AIT_Lab1.bayes import *
+from bayes import *
 
 cookies = Bayes(
     hypotheses = ["Bowl1", "Bowl2"], 
@@ -32,7 +32,6 @@ n_c = cookies.norm_constant("vanilla")
 p_1 = cookies.single_posterior_update("vanilla", [0.5, 0.5])
 answers.append(p_1[0])
 p_2 = cookies.compute_posterior(["chocolate", "vanilla"])
-# DOUBLE CHECK --> NOT SURE IF THIS IS CORRECT. 
 p_2_answer = cookies.compute_posterior(["chocolate","vanilla"])[cookies.hypotheses.index('Bowl2')]
 answers.append(p_2_answer)
 
