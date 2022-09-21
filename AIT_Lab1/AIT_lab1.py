@@ -36,7 +36,7 @@ p_2_answer = cookies.compute_posterior(["chocolate","vanilla"])[cookies.hypothes
 answers.append(p_2_answer)
 
 # Computation of part 2: archery
-probs = archery.compute_posterior(["Yellow", "White", "Red", "Red", "Blue"])
+probs = archery.compute_posterior(["Yellow", "White", "Blue", "Red", "Red", "Blue"])
 answers.append(probs[archery.hypotheses.index('Intermediate')])
 most_likely_level = archery.hypotheses[probs.index(max(probs))]
 answers.append(most_likely_level)
@@ -47,7 +47,7 @@ def file_creator():
     with open("group_15.txt", 'w') as file:
         answer_string = ""
         for i in range(len(answers)):
-            answer_string += "Answer question {}: {}\n".format(i+1, answers[i] if isinstance(answers[i], str) else round(answers[i], 3))
+            answer_string += "{}\n".format(answers[i] if isinstance(answers[i], str) else round(answers[i], 3))
         file.write(answer_string)
 
 if __name__ == "__main__":

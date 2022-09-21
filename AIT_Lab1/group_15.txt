@@ -1,4 +1,4 @@
-Answer question 1: 0.636
-Answer question 2: 0.485
-Answer question 3: 0.099
-Answer question 4: Advanced
+0.636
+0.485
+0.135
+Advanced
