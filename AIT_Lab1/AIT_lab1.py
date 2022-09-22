@@ -131,10 +131,13 @@ class Bayes:
             List of observations that were made in a sequence
         """ 
 
-        posterior = self.single_posterior_update(obv_list[0], self.priors)
-        for i in range(1, len(obv_list)):
-            posterior = self.single_posterior_update(obv_list[i], posterior)
-        return posterior
+        # posterior = self.single_posterior_update(obv_list[0], self.priors)
+        init_priors = self.priors
+        for i in range(0, len(obv_list)):
+            self.priors = self.single_posterior_update(obv_list[i], self.priors)
+        posteriors = self.priors
+        self.priors = init_priors
+        return posteriors
 
 # Initializing Bayes class instances 
 cookies = Bayes(
