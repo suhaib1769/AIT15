@@ -131,7 +131,6 @@ class Bayes:
             List of observations that were made in a sequence
         """ 
 
-        # posterior = self.single_posterior_update(obv_list[0], self.priors)
         init_priors = self.priors
         for i in range(0, len(obv_list)):
             self.priors = self.single_posterior_update(obv_list[i], self.priors)
