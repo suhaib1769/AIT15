@@ -1,3 +1,4 @@
+import numpy as np
 
 NUM_EPISODES = 1000
 MAX_EPISODE_LENGTH = 500
@@ -16,7 +17,12 @@ class QLearner():
     """
     def __init__(self, num_states, num_actions, discount=DEFAULT_DISCOUNT, learning_rate=LEARNINGRATE): 
         self.name = "agent1"
+        self.n_states = num_states
+        self.n_actions = num_actions
+        self.gamma = discount
+        self.alpha = learning_rate
 
+        self.Qtable = np.zeros((num_states,num_actions))
 
 
     def reset_episode(self):
