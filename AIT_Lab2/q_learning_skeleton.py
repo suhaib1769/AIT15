@@ -52,7 +52,18 @@ class QLearner():
         """
         Returns an action, selected based on the current state
         """
-        pass
+        if (np.random.random() < EPSILON):
+            # exploration
+            action = np.random.randint(self.n_actions)
+
+            print("explored ", action)
+        else:
+            # exploitation
+            bestactions = np.argwhere(self.Qtable[state,:] == np.max(self.Qtable[state,:]))
+            chooseaction = np.random.randint(np.size(bestactions))
+            print("exoploited ", bestactions[chooseaction])
+            return bestactions[chooseaction]
+
 
 
 
