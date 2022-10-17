@@ -36,6 +36,7 @@ def act_loop(env, agent, num_episodes):
                 print("Episode finished after {} timesteps".format(t+1))
                 env.render()
                 agent.report()
+                agent.report_policy()
                 break
 
     env.close()

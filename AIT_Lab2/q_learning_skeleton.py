@@ -23,6 +23,7 @@ class QLearner():
         self.alpha = learning_rate
 
         self.Qtable = np.zeros((num_states,num_actions))
+        self.policy = []
 
 
     def reset_episode(self):
@@ -71,7 +72,17 @@ class QLearner():
         """
         print("---")
 
+    def report_policy(self):
+        """
+        Find the current optimal policy
+        """
+        self.policy = []
 
+        for i in range(0, self.n_states):
+            optimal_action = np.argmax(self.Qtable[i])
+            self.policy.append(optimal_action)
+
+        print(np.array(self.policy))
 
 
 
