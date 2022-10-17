@@ -39,12 +39,13 @@ class QLearner():
         Update the Q-value based on the state, action, next state and reward.
         """
         if done:
+            # episode will terminate
             self.Qtable[state,action] = (1-self.alpha) * self.Qtable[state,action] + self.alpha*reward
 
         else:
             best_action = np.argmax(self.Qtable[next_state,:])
             self.Qtable[state,action] = (1-self.alpha) * self.Qtable[state,action] \
-                                        + (self.alpha) * (reward + self.gamma * self.Qtable(next_state,best_action))
+                                        + (self.alpha) * (reward + self.gamma * self.Qtable[next_state,best_action])
 
 
 
