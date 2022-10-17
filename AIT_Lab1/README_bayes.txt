@@ -19,4 +19,4 @@ Since we keep updating the posteriors, each next iteration takes the current val
 After all observations have been processed, the posterior probabilities are returned.
 
 To run our code from the terminal and generate the answer file called "group_15.txt", cd into the unzipped folder (i.e. AIT_Lab1) where the python files are saved.
-The python file that produces the answer file is then run by typinh "python .\AIT_lab1.py".
+The python file that produces the answer file is then run by typing "python .\AIT_lab1.py".
