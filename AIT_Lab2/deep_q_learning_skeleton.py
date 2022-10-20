@@ -28,8 +28,8 @@ class ReplayMemory(object):
     # ReplayMemory should store the last "size" experiences
     # and be able to return a randomly sampled batch of experiences
     def __init__(self, size):
-        self.size=size
-        self.counter=0
+        self.size = size
+        self.counter = 0
 
         self.exp_prev_obs = []
         self.exp_action = []
@@ -46,13 +46,13 @@ class ReplayMemory(object):
             self.exp_reward.append(reward)
             self.ex_done.append(done)
         else:
-            self.exp_prev_obs[self.counter%self.size] = prev_obs
-            self.exp_action[self.counter%self.size] = action
-            self.exp_observation[self.counter%self.size] = observation
-            self.exp_reward[self.counter%self.size] = reward
-            self.ex_done[self.counter%self.size] = done
+            self.exp_prev_obs[self.counter % self.size] = prev_obs
+            self.exp_action[self.counter % self.size] = action
+            self.exp_observation[self.counter % self.size] = observation
+            self.exp_reward[self.counter % self.size] = reward
+            self.ex_done[self.counter % self.size] = done
 
-        self.counter+=1
+        self.counter += 1
 
     # Randomly sample "batch_size" experiences from the memory and return them
     def sample_batch(self, batch_size):
