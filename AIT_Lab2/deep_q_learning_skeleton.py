@@ -259,7 +259,7 @@ class QLearner(object):
                 next_observations.append(x[2])
                 rewards.append(x[3])
                 dones=np.append(dones,x[4])
-                self.Q.batch_Q_update(observations,actions,next_observations,rewards,dones)
+            self.Q.batch_Q_update(observations,actions,next_observations,rewards,dones)
 
     def select_action(self):
         """select an action based on self.last_obs
