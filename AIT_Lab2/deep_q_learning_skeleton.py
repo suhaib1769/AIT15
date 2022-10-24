@@ -43,7 +43,9 @@ class ReplayMemory(object):
 
     # Randomly sample "batch_size" experiences from the memory and return them
     def sample_batch(self, batch_size):
-        return random.sample(self.experiences,batch_size)
+        if batch_size > len(self.experiences):
+            raise Exception('You do not have enough experiences')
+        return random.sample(self.experiences, batch_size)
 
 
 # DEBUG=True
@@ -244,6 +246,7 @@ class QLearner(object):
         self.stage += 1
         self.Q.single_Q_update(prev_observation, action, observation, reward, done)
         self.last_obs = observation
+        self.rm.store_experience(prev_observation, action, observation, reward, done)
         # sample a batch of batch_size from the replay memory
         # and update the network using this batch (batch_Q_update)
         if self.tot_stages > 10 * self.batch_size:
