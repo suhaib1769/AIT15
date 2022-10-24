@@ -79,7 +79,7 @@ class QNet(nn.Module):
 
         if batch_size > 1:
             v,_ = Qs.max(dim=1)
-        else: 
+        else:
             v = Qs.max()
         v = v.detach().numpy()
         #print ("... Vs: %s" % v)
@@ -91,7 +91,7 @@ class QNet(nn.Module):
         t_Qs = self.forward(observation) #<- this should feed in the input
 
         #NOOO! this will *not* randomly break ties(!)...
-        # m = np.argmax(self.data[observation, :]) 
+        # m = np.argmax(self.data[observation, :])
         #instead:
         Qs = t_Qs.detach().numpy()
         if DEBUG:
@@ -121,14 +121,14 @@ class QNet(nn.Module):
         t_prev_observation = self.obs_to_tensor(prev_observation)
 
         if done:
-            future_val = 0 
+            future_val = 0
         else:
             future_val = self.max_Q_value(t_observation)        ##<<- this evaluates the QNet
-        # We just evaluated the Qnet for the next-stage variables, but of course... the effect of the Qnet 
-        # parameters on the *next-stage* value is ignored by Q-learning. 
-        # (residual gradient algorithms do takes this into account, but 
+        # We just evaluated the Qnet for the next-stage variables, but of course... the effect of the Qnet
+        # parameters on the *next-stage* value is ignored by Q-learning.
+        # (residual gradient algorithms do takes this into account, but
         #   formally need 2 successor state samples)
-        # So... we need to reset the gradients. (otherwise they accumulate e.g., see; 
+        # So... we need to reset the gradients. (otherwise they accumulate e.g., see;
         # https://medium.com/@zhang_yang/how-pytorch-tensors-backward-accumulates-gradient-8d1bf675579b)
         self.zero_grad()
 
@@ -227,7 +227,7 @@ class QLearner(object):
         self.stage = 0      #the time step, or 'stage' in this episode
         self.tot_stages = 0 #total time steps in lifetime
 
-        self.targetQ = target_q_function   #for coding exercise 4
+        self.target_Q = target_q_function   #for coding exercise 4
 
     def reset_episode(self, initial_obs):
         self.last_obs = initial_obs
@@ -265,7 +265,7 @@ class QLearner(object):
                 rewards.append(x[3])
                 dones=np.append(dones,x[4])
             self.Q.batch_Q_update(observations,actions,next_observations,rewards,dones)
-            self.targetQ.batch_Q_update(observations,actions,next_observations,rewards,dones)
+            self.target_Q.batch_Q_update(observations,actions,next_observations,rewards,dones)
 
     def select_action(self):
         """select an action based on self.last_obs
