@@ -27,40 +27,39 @@ LEARNINGRATENET = 0.0001  # QNET
 class ReplayMemory(object):
     # ReplayMemory should store the last "size" experiences
     # and be able to return a randomly sampled batch of experiences
-    def __init__(self, size):
+    def __init__(self, size, obs_len=9):
         self.size = size
         self.counter = 0
 
-        self.exp_prev_obs = []
-        self.exp_action = []
-        self.exp_observation = []
-        self.exp_reward = []
-        self.ex_done = []
+        self.exp_prev_obs = np.zeros((self.size, obs_len))
+        self.exp_action = np.zeros(self.size)
+        self.exp_observation = np.zeros((self.size, obs_len))
+        self.exp_reward = np.zeros(self.size)
+        self.ex_done = np.zeros(self.size)
 
     # Store experience in memory
     def store_experience(self, prev_obs, action, observation, reward, done):
-        if(len(self.experiences)<self.size):
-            self.exp_prev_obs.append(prev_obs)
-            self.exp_action.append(action)
-            self.exp_observation.append(observation)
-            self.exp_reward.append(reward)
-            self.ex_done.append(done)
-        else:
-            self.exp_prev_obs[self.counter % self.size] = prev_obs
-            self.exp_action[self.counter % self.size] = action
-            self.exp_observation[self.counter % self.size] = observation
-            self.exp_reward[self.counter % self.size] = reward
-            self.ex_done[self.counter % self.size] = done
+        ind = self.counter % self.size
+        self.exp_prev_obs[ind] = prev_obs
+        self.exp_action[ind] = action
+        self.exp_observation[ind] = observation
+        self.exp_reward[ind] = reward
+        self.ex_done[ind] = done
 
         self.counter += 1
 
     # Randomly sample "batch_size" experiences from the memory and return them
     def sample_batch(self, batch_size):
-        end = min(batch_size, self.size) # to account for batch_size > number of experiences in memory
-        sample_indices = np.random.sample(np.arange(self.size),end)
 
-        return (self.exp_prev_obs[sample_indices], self.exp_action[sample_indices], self.exp_observation[sample_indices],\
-            self.exp_reward[sample_indices], self.ex_done[sample_indices])
+        end = min(batch_size, self.counter) # to account for batch_size > number of experiences in memory
+        sample_indices = np.random.choice(np.arange(self.size), size=end, replace=False)
+        e_pr = self.exp_prev_obs[sample_indices]
+        e_ac = self.exp_action[sample_indices]
+        e_ob = self.exp_observation[sample_indices]
+        e_re = self.exp_reward[sample_indices]
+        e_do = self.ex_done[sample_indices]
+
+        return e_pr, e_ac, e_ob, e_re, e_do
 
 
 # DEBUG=True
