@@ -128,7 +128,6 @@ class QNet(nn.Module):
             I.e., if observation is a discrete variable (with say N values=states), but QNet
             is working on one-hot vectors (of length N), then observation needs to be such a
             one-hot vector.
-
             QNet is not responsible for conversion
         """
         t_observation = self.obs_to_tensor(observation)
@@ -260,6 +259,7 @@ class QLearner(object):
         self.stage += 1
         self.Q.single_Q_update(prev_observation, action, observation, reward, done)
         self.last_obs = observation
+        self.rm.store_experience(prev_observation, action, observation, reward, done)
 
         # TODO coding exercise 3: Do a batch update using experience stored in the replay memory
         # if self.tot_stages > 10 * self.batch_size:
