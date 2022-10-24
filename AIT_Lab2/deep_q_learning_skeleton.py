@@ -208,7 +208,7 @@ class QNet_MLP(QNet):
 
 
 class QLearner(object):
-    def __init__(self, env, q_function, discount=DEFAULT_DISCOUNT, rm_size=RMSIZE):
+    def __init__(self, env, q_function, target_q_function, discount=DEFAULT_DISCOUNT, rm_size=RMSIZE):
         self.env = env
         self.Q = q_function
         self.rm = ReplayMemory(rm_size)  # replay memory stores (a subset of) experience across episode
@@ -227,6 +227,7 @@ class QLearner(object):
         self.stage = 0      #the time step, or 'stage' in this episode
         self.tot_stages = 0 #total time steps in lifetime
 
+        self.targetQ = target_q_function   #for coding exercise 4
 
     def reset_episode(self, initial_obs):
         self.last_obs = initial_obs
@@ -245,6 +246,7 @@ class QLearner(object):
         self.dis_r += reward * (self.discount ** self.stage)
         self.stage += 1
         self.Q.single_Q_update(prev_observation, action, observation, reward, done)
+        self.target_Q.single_Q_update(prev_observation, action, observation, reward, done)
         self.last_obs = observation
         self.rm.store_experience(prev_observation, action, observation, reward, done)
         # sample a batch of batch_size from the replay memory
@@ -263,6 +265,7 @@ class QLearner(object):
                 rewards.append(x[3])
                 dones=np.append(dones,x[4])
             self.Q.batch_Q_update(observations,actions,next_observations,rewards,dones)
+            self.targetQ.batch_Q_update(observations,actions,next_observations,rewards,dones)
 
     def select_action(self):
         """select an action based on self.last_obs
