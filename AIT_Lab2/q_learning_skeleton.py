@@ -6,8 +6,9 @@ MAX_EPISODE_LENGTH = 500
 
 DEFAULT_DISCOUNT = 0.9
 EPSILON = 0.05
+EPSILON_START = EPSILON
+EPSILON_END = 0.001
 LEARNINGRATE = 0.1
-TEMPERATURE = 1
 
 action_list = [
     "LEFT", "DOWN", "RIGHT", "UP"
@@ -68,12 +69,19 @@ class QLearner():
             chooseaction = np.random.randint(np.size(bestactions))
             return bestactions[chooseaction]
 
-    def softmax_activation_function(self, state):
-        denom = sum([np.exp(self.Qtable[state, a]/TEMPERATURE) for a in range(self.n_actions)])
-        pi  = np.array([np.exp(self.Qtable[state, a]/TEMPERATURE)/denom for a in range(self.n_actions)])
-        bestactions = np.argwhere(pi[:] == np.max(pi[:])).flatten().tolist()
-        chooseaction = np.random.randint(np.size(bestactions))
-        return bestactions[chooseaction]
+    def decaying_epsilon_greedy(self, state, t):
+        rate_of_decay = max([(MAX_EPISODE_LENGTH - t)/MAX_EPISODE_LENGTH, 0])
+        epsilon = (EPSILON_START - EPSILON_END)*rate_of_decay + EPSILON_END
+        if (np.random.random() < epsilon):
+            # exploration
+            action = np.random.randint(self.n_actions)
+            return action
+
+        else:
+            # exploitation
+            bestactions = np.argwhere(self.Qtable[state,:] == np.max(self.Qtable[state,:])).flatten().tolist()
+            chooseaction = np.random.randint(np.size(bestactions))
+            return bestactions[chooseaction]
 
 
 
