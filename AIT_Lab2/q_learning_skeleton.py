@@ -82,9 +82,12 @@ class QLearner():
             optimal_action = np.argmax(self.Qtable[i])
             self.policy.append(optimal_action)
 
+        print("\n")
+        print("policy after learning:\n")
         print(np.array(self.policy))
 
-        print("\n optimal policy:")
+        print("\n")
+        print("Qtable after learning:\n")
         print(self.Qtable)
 
 

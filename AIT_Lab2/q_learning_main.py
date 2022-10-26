@@ -1,5 +1,6 @@
 from turtle import clear
 import simple_grid
+import q_learning_value_iteration
 from q_learning_skeleton import *
 import gym
 
@@ -47,7 +48,8 @@ def act_loop(env, agent, num_episodes):
                 break
 
     env.close()
-    print("final report:")
+    print("\n-------------------------------------------------------------------------------------------")
+    print("\nFINAL REPORT:\n")
     agent.report_policy()
     return outcomes
 
@@ -57,8 +59,9 @@ def act_loop_after_training(env, agent):
         state = env.reset()
         done = False
 
+        n = 0
         # Until the agent gets stuck or reaches the goal, keep training it
-        while not done:
+        while not done and n < 1000:
             action = agent.select_action(state, trained=True)
             new_state, reward, done, info = env.step(action)
 
@@ -68,68 +71,38 @@ def act_loop_after_training(env, agent):
             # When we get a reward, it means we solved the game
             if(reward == 10):
                 nb_success += 1
+            n += 1
+
     env.close()
-    return nb_success
-
-EPSILON_DIFFERENCE = 0.000001
-
-def value_iteration(env, gamma):
-    num_a = env.action_space.n
-    num_s = env.observation_space.n
-    Q = np.zeros((num_s, num_a))
-    while True:
-        delta = 0
-        Q_new = np.zeros((num_s, num_a))
-        for s in range(num_s):
-            for a in range(num_a):
-                if(s != num_s - 1):
-                    Q_new[s][a] = bellman(Q, env.P, s, a, gamma)
-                    delta = max(delta, abs(Q[s][a] - Q_new[s][a]))
-        Q = Q_new
-        if delta < EPSILON_DIFFERENCE:
-            return Q
-        
-
-def bellman(Q, P, s, a, gamma):
-    sum_states = 0
-    for i in range(len(P[s][a])):
-        next_state = P[s][a][i][1]
-        reward = P[s][a][i][2]
-        if(next_state == 4 or next_state == 8):
-            reward += 0.2*simple_grid.BROKEN_LEG_PENALTY
-        if(next_state == 12):
-            reward += simple_grid.REWARD
-        sum_states += P[s][a][i][0]*(reward + gamma*np.max(Q[next_state][:]))
-    return sum_states
-
-def policy_extraction(Q):
-    policy = []
-    for state in Q:
-        policy.append(np.argmax(state))
-    
-    return policy
+    print(f"\nSuccess rate = {nb_success}%\n")
 
 if __name__ == "__main__":
-    ### CHOOSE ENVIRONMENT:
-    env = simple_grid.DrunkenWalkEnv(map_name="walkInThePark")
-    # env = simple_grid.DrunkenWalkEnv(map_name="theAlley")
+    #######################
+    ###   ENVIRONMENT   ###
+    #######################
+    # env = simple_grid.DrunkenWalkEnv(map_name="walkInThePark")
+    env = simple_grid.DrunkenWalkEnv(map_name="theAlley")
 
-    ### TRAINING THE AGENT AND EVALUATING BEHAVIOR AFTER TRAINING
-    # num_a = env.action_space.n
+    #######################
+    ###    TRAINING     ###
+    # #######################
+    num_a = env.action_space.n
 
-    # if (type(env.observation_space)  == gym.spaces.discrete.Discrete):
-    #     num_o = env.observation_space.n
-    # else:
-    #     raise("Qtable only works for discrete observations")
+    if (type(env.observation_space)  == gym.spaces.discrete.Discrete):
+        num_o = env.observation_space.n
+    else:
+        raise("Qtable only works for discrete observations")
 
-    # discount = DEFAULT_DISCOUNT
-    # ql = QLearner(num_o, num_a, discount) #<- QTable
-    # outcomes = act_loop(env, ql, NUM_EPISODES)
-    # success = act_loop_after_training(env, ql)
-    # print(f"Success rate = {success}%")
+    discount = DEFAULT_DISCOUNT
+    ql = QLearner(num_o, num_a, discount) #<- QTable
+    outcomes = act_loop(env, ql, NUM_EPISODES)
+    # act_loop_after_training(env, ql)
+    
 
-    ### VALUE ITERATION
-    # Q = value_iteration(env, 0.9)
-    # print(Q)
-    # policy = policy_extraction(Q)
-    # print(policy)
+    #######################
+    ### VALUE ITERATION ###
+    #######################
+    value_iterator = q_learning_value_iteration.valueIterator(env)
+    Q = value_iterator.value_iteration()
+    print(Q)
+    value_iterator.policy_extraction(Q)
