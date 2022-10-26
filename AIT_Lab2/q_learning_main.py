@@ -25,7 +25,7 @@ def act_loop(env, agent, num_episodes):
                 print("state:", state)
 
             action = agent.select_action(state)
-            # action = agent.softmax_activation_function(state)
+            # action = agent.decaying_epsilon_greedy(state, t)
             new_state, reward, done, info = env.step(action)
             if printing:
                 print("act:", action)
