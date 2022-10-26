@@ -56,7 +56,7 @@ class QLearner():
         """
         if (np.random.random() < EPSILON and not trained):
             # exploration
-            action = np.random.randint(self.n_actions)
+            action = np.random.randint(0, self.n_actions-1)
             return action
 
         else:
