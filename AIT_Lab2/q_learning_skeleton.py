@@ -50,13 +50,13 @@ class QLearner():
 
 
 
-    def select_action(self, state):
+    def select_action(self, state, trained=False):
         """
         Returns an action, selected based on the current state
         """
-        if (np.random.random() < EPSILON):
+        if (np.random.random() < EPSILON and not trained):
             # exploration
-            action = np.random.randint(self.n_actions)
+            action = np.random.randint(0, self.n_actions-1)
             return action
 
         else:
@@ -82,7 +82,13 @@ class QLearner():
             optimal_action = np.argmax(self.Qtable[i])
             self.policy.append(optimal_action)
 
+        print("\n")
+        print("policy after learning:\n")
         print(np.array(self.policy))
+
+        print("\n")
+        print("Qtable after learning:\n")
+        print(self.Qtable)
 
 
 
