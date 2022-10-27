@@ -240,7 +240,7 @@ class QLearner(object):
         self.stage = 0      #the time step, or 'stage' in this episode
         self.tot_stages = 0 #total time steps in lifetime
 
-        self.target_Q = target_q_function   #for coding exercise 4
+        self.target_Q = target_q_function   #adding target q for coding exercise 4
 
     def reset_episode(self, initial_obs):
         self.last_obs = initial_obs
@@ -259,7 +259,7 @@ class QLearner(object):
         self.dis_r += reward * (self.discount ** self.stage)
         self.stage += 1
         self.Q.single_Q_update(prev_observation, action, observation, reward, done)
-        self.target_Q.single_Q_update(prev_observation, action, observation, reward, done)
+        self.target_Q.single_Q_update(prev_observation, action, observation, reward, done) #required for coding exercise 4
         self.last_obs = observation
         self.rm.store_experience(prev_observation, action, observation, reward, done)
 
@@ -271,7 +271,7 @@ class QLearner(object):
         if self.tot_stages > 10 * self.batch_size:
             prev_obs, act, obs, rew, don =self.rm.sample_batch(self.batch_size)
             self.Q.batch_Q_update(prev_obs,act,obs,rew,don)
-            self.target_Q.batch_Q_update(prev_obs,act,obs,rew,don)
+            self.target_Q.batch_Q_update(prev_obs,act,obs,rew,don)   #required for coding exercise 4
 
 
 
